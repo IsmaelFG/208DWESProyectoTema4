@@ -134,12 +134,16 @@
         $password = 'paso';
         include_once('../core/231018libreriaValidacion.php'); //Importar la libreria de validacion
         $entradaOK = true; //Indica si todas las respuestas son correctas
+        // Obtener la fecha y hora actual en Datetime
+        $FechaCreacion = date('Y-m-d H:i:s');
+        $oFechaCreacionDateTime = new DateTime($FechaCreacion);
         //Almacena las respuestas
         $aRespuestas = [
             'CodDepartamento' => '',
             'DescDepartamento' => '',
-            'FechaBaja' => null,
-            'VolumenNegocio' => ''
+            'FechaCreacionDepartamento' => '',
+            'VolumenNegocio' => '',
+            'FechaBaja' => null
         ];
         //Almacena los errores
         $aErrores = [
@@ -158,8 +162,7 @@
             // Comprobar si el CodDepartamento introducido ya existe
             if ($aErrores['CodDepartamento'] == null) {
                 $miDB = new PDO($dsn, $username, $password);
-                $consulta = $miDB->prepare("SELECT CodDepartamento FROM Departamento WHERE CodDepartamento = :CodDepartamento");
-                $consulta->bindParam(':CodDepartamento', $_REQUEST['CodDepartamento'], PDO::PARAM_STR);
+                $consulta = $miDB->prepare('SELECT T02_CodDepartamento FROM T02_Departamento WHERE T02_CodDepartamento ="' . $_REQUEST['CodDepartamento'] . '";');
                 $consulta->execute();
                 if ($consulta->rowCount() > 0) {
                     $aErrores['CodDepartamento'] = 'El CodDepartamento ya existe.';
@@ -182,41 +185,44 @@
             $aRespuestas = [
                 'CodDepartamento' => $_REQUEST['CodDepartamento'],
                 'DescDepartamento' => $_REQUEST['DescDepartamento'],
-                'FechaBaja' => null,
-                'VolumenNegocio' => $_REQUEST['VolumenNegocio']
+                'FechaCreacionDepartamento' => $oFechaCreacionDateTime->format('Y-m-d H:i:s'),
+                'VolumenNegocio' => $_REQUEST['VolumenNegocio'],
+                'FechaBaja' => null
             ];
 
             try {
                 $miDB = new PDO($dsn, $username, $password);
 
-                $consulta = "INSERT INTO Departamento (CodDepartamento, DescDepartamento, VolumenNegocio) 
-                     VALUES (:CodDepartamento, :DescDepartamento, :VolumenNegocio)";
+                $consulta = "INSERT INTO T02_Departamento (T02_CodDepartamento, T02_DescDepartamento, T02_FechaCreacionDepartamento, T02_VolumenNegocio) 
+                 VALUES (:CodDepartamento, :DescDepartamento,:FechaCreacionDepartamento, :VolumenNegocio)";
 
                 // Consulta preparada
                 $resultadoConsulta = $miDB->prepare($consulta);
 
-                $resultadoConsulta->bindParam(':CodDepartamento', $aRespuestas['CodDepartamento']);
-                $resultadoConsulta->bindParam(':DescDepartamento', $aRespuestas['DescDepartamento']);
-                $resultadoConsulta->bindParam(':VolumenNegocio', $aRespuestas['VolumenNegocio']);
-
-                // Ejecutando la declaración SQL
-                if ($resultadoConsulta->execute()) {
+                // Asignar valores a los parámetros de la consulta preparada en el método execute
+                if ($resultadoConsulta->execute([
+                            ':CodDepartamento' => $aRespuestas['CodDepartamento'],
+                            ':DescDepartamento' => $aRespuestas['DescDepartamento'],
+                            ':FechaCreacionDepartamento' => $aRespuestas['FechaCreacionDepartamento'],
+                            ':VolumenNegocio' => $aRespuestas['VolumenNegocio'],
+                        ])) {
                     echo "Los datos se han insertado correctamente en la tabla Departamento.</br>";
                     //Ejecutamos una query en la tabla Departamento.
-                    $resultadoDepartamentos = $miDB->query("select * from Departamento;");
+                    $resultadoDepartamentos = $miDB->query("select * from T02_Departamento;");
                     //Mostrar el numerode registros mediante rowCount()
                     printf("<p>Número de registros: %s</p><br>", $resultadoDepartamentos->rowCount());
                     //Cargamos los resultados mediante fetchObject().
                     $oDepartamento = $resultadoDepartamentos->fetchObject();
                     //Creamos una tabla para mostrar los resultados
-                    echo "<table border=1><tr><th>CodigoDepartamento</th><th>DescripcionDepartamento</th><th>FechaBajaDepartamento</th><th>VolumenDeNegocio</th></tr><tbody>";
+                    echo "<table border=1><tr><th>CodigoDepartamento</th><th>DescripcionDepartamento</th><th>FechaCreacionDepartamento</th><th>VolumenDeNegocio</th><th>FechaBajaDepartamento</th></tr><tbody>";
                     while ($oDepartamento != null) {
                         echo "<tr>";
-                        //Recorrido por filas
-                        echo "<td>$oDepartamento->CodDepartamento</td>"; //Obtener los códigos.
-                        echo "<td>$oDepartamento->DescDepartamento</td>"; //Obtener las descripciones.
-                        echo "<td>$oDepartamento->FechaBaja</td>"; //Obtener la fecha de baja.
-                        echo "<td>$oDepartamento->VolumenNegocio</td>"; //Obtener el volumen de negocio. 
+                        //Recorrido de la fila cargada
+                        echo "<td>$oDepartamento->T02_CodDepartamento</td>"; //Obtener los códigos.
+                        echo "<td>$oDepartamento->T02_DescDepartamento</td>"; //Obtener las descripciones.
+                        echo "<td>$oDepartamento->T02_FechaCreacionDepartamento</td>"; //Obtener la fecha de creacion
+                        echo "<td>$oDepartamento->T02_VolumenNegocio</td>"; //Obtener el volumen de negocio.
+                        echo "<td>$oDepartamento->T02_FechaBaja</td>"; //Obtener la fecha de baja.
                         echo "</tr>";
                         $oDepartamento = $resultadoDepartamentos->fetchObject();
                     }
@@ -244,15 +250,26 @@
                         <td class="error"><?php echo (!empty($aErrores["DescDepartamento"]) ? $aErrores["DescDepartamento"] : ''); ?></td>
                     </tr>
                     <tr>
-                        <td><label for="FechaBaja">Fecha Baja:</label></td>
-                        <td><input  type="text" id="FechaBaja" name="FechaBaja" value="" disabled></td>
-                        <td class="error"><?php echo (!empty($aErrores["FechaBaja"]) ? $aErrores["FechaBaja"] : ''); ?></td>
+                        <td><label for="FechaCreacionDepartamento">Fecha Creacion:</label></td>
+                        <td>
+                            <input  type="text" 
+                                    id="FechaCreacionDepartamento" 
+                                    name="FechaCreacionDepartamento" 
+                                    value="<?php echo ($oFechaCreacionDateTime->format('Y-m-d H:i:s')); ?>" 
+                                    disabled>
+                            </td>
+                        <td class="error"><?php echo (!empty($aErrores["FechaCreacionDepartamento"]) ? $aErrores["FechaCreacionDepartamento"] : ''); ?></td>
                     </tr>
                     <tr>
                         <td><label for="VolumenNegocio">Volumen Negocio:</label></td>
                         <td><input class="obligatorio" type="text" id="VolumenNegocio" name="VolumenNegocio" value="<?php echo (isset($_REQUEST['VolumenNegocio']) ? $_REQUEST['VolumenNegocio'] : ''); ?>"></td>
                         <td class="error"><?php echo (!empty($aErrores["VolumenNegocio"]) ? $aErrores["VolumenNegocio"] : ''); ?></td>
-                    </tr>    
+                    </tr>
+                    <tr>
+                        <td><label for="FechaBaja">Fecha Baja:</label></td>
+                        <td><input  type="text" id="FechaBaja" name="FechaBaja" value="" disabled></td>
+                        <td class="error"><?php echo (!empty($aErrores["FechaBaja"]) ? $aErrores["FechaBaja"] : ''); ?></td>
+                    </tr>
                 </table>
                 <input type="reset" value="Borrar">
                 <input name="enviar" type="submit" value="Añadir">

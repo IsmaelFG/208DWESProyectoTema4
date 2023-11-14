@@ -32,20 +32,21 @@
             //Crear un objeto PDO.
             $miDB = new PDO($dsn, $username, $password);
             //Ejecutamos una query en la tabla Departamento.
-            $resultadoDepartamentos = $miDB->query("select * from Departamento;");
+            $resultadoDepartamentos = $miDB->query("select * from T02_Departamento;");
             //Mostrar el numerode registros mediante rowCount()
             printf("<p>Número de registros: %s</p><br>", $resultadoDepartamentos->rowCount());
             //Cargamos los resultados mediante fetch(PDO::FETCH_OBJ).
             $oDepartamento = $resultadoDepartamentos->fetchObject();
             //Creamos una tabla para mostrar los resultados
-            echo "<table border=1><tr><th>CodigoDepartamento</th><th>DescripcionDepartamento</th><th>VolumenDeNegocio</th><th>FechaBajaDepartamento</th></tr><tbody>";
+            echo "<table border=1><tr><th>CodigoDepartamento</th><th>DescripcionDepartamento</th><th>FechaCreacionDepartamento</th><th>VolumenDeNegocio</th><th>FechaBajaDepartamento</th></tr><tbody>";
             while ($oDepartamento != null) {
                 echo "<tr>";
                 //Recorrido de la fila cargada
-                echo "<td>$oDepartamento->CodDepartamento</td>"; //Obtener los códigos.
-                echo "<td>$oDepartamento->DescDepartamento</td>"; //Obtener las descripciones.
-                echo "<td>$oDepartamento->FechaBaja</td>"; //Obtener la fecha de baja.
-                echo "<td>$oDepartamento->VolumenNegocio</td>"; //Obtener el volumen de negocio. 
+                echo "<td>$oDepartamento->T02_CodDepartamento</td>"; //Obtener los códigos.
+                echo "<td>$oDepartamento->T02_DescDepartamento</td>"; //Obtener las descripciones.
+                echo "<td>$oDepartamento->T02_FechaCreacionDepartamento</td>"; //Obtener la fecha de creacion
+                echo "<td>$oDepartamento->T02_VolumenNegocio</td>"; //Obtener el volumen de negocio.
+                echo "<td>$oDepartamento->T02_FechaBaja</td>"; //Obtener la fecha de baja.
                 echo "</tr>";
                 $oDepartamento = $resultadoDepartamentos->fetchObject();
             }
