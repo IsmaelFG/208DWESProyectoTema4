@@ -100,26 +100,6 @@
             input[type="submit"]:hover {
                 background-color: #0056b3;
             }
-            .tabla_resultados{
-                width: 100%;
-                margin-top: 20px;
-                border-collapse: collapse;
-            }
-
-            .tabla_resultados th, .tabla_resultados td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
-
-            .tabla_resultados th {
-                background-color: #007BFF;
-                color: white;
-            }
-
-            .tabla_resultados tbody tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
         </style>
     </head>
     <body style="margin-top:70px; margin-bottom: 100px">
