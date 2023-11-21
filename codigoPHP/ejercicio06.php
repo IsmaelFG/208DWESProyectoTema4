@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>codigo03</title>
+        <title>codigo06</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="/208DWESProyectoTema3/webroot/css/style.css">
         <style>
@@ -105,114 +104,63 @@
     <body style="margin-top:70px; margin-bottom: 100px">
         <nav class="navbar navbar-expand-lg bg-primary fixed-top">
             <div class="container">
-                <a class="navbar-brand text-white" href="/index.html">Ejercicio03</a>
+                <a class="navbar-brand text-white" href="/index.html">Ejercicio06</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
         </nav>
-        <h1>Cuestionario</h1>
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-            <table>
-                <tr>
-                    <td><label for="DescDepartamento">Descripcion Departamento:</label></td>
-                    <td><input type="text" id="DescDepartamento" name="DescDepartamento" value="<?php echo (isset($_REQUEST['DescDepartamento']) ? $_REQUEST['DescDepartamento'] : ''); ?>"></td>
-                </tr>
-            </table>
-            <input name="enviar" type="submit" value="Buscar">
-        </form>
-
         <?php
         $dsn = 'mysql:host=192.168.20.19;dbname=DB208DWESProyectoTema4';
         $username = 'user208DWESProyectoTema4';
         $password = 'paso';
-        include_once('../core/231018libreriaValidacion.php');
+// Especifica la ruta al archivo JSON
+        $jsonFilePath = "/var/www/DAW208/public_html/208DWESProyectoTema4/tmp/departamentos.json";
 
-        // Verificar si se envió el formulario
-        if (isset($_REQUEST['enviar'])) {
-            // Almacena las respuestas y los errores
-            $aRespuestas = [
-                'DescDepartamento' => ''
-            ];
-            $aErrores = [
-                'DescDepartamento' => ''
-            ];
+// Verifica si el archivo existe
+        if (file_exists($jsonFilePath)) {
+            // Lee el contenido del archivo JSON
+            $jsonContents = file_get_contents($jsonFilePath);
 
-            // Validar los campos
-            $aErrores = [
-                'DescDepartamento' => validacionFormularios::comprobarAlfaNumerico($_REQUEST['DescDepartamento'], 255, 1)
-            ];
+            // Decodifica los datos JSON
+            $departamentos = json_decode($jsonContents, true);
 
-            // Recorre aErrores para ver si hay alguno
-            foreach ($aErrores as $campo => $valor) {
-                if ($valor != null) {
-                    // Limpiamos el campo
-                    $_REQUEST[$campo] = '';
+            // Verifica si la decodificación fue exitosa
+            if ($departamentos !== null) {
+                
+                try {
+                    // Conexión a la base de datos
+                    $conexion = new PDO($dsn, $username, $password);
+
+                    // Prepara la consulta para la inserción
+                    $sql = "INSERT INTO T02_Departamento (T02_CodDepartamento, T02_FechaCreacionDepartamento, T02_DescDepartamento, T02_VolumenNegocio, T02_FechaBaja) 
+                    VALUES (:codDepartamento, :fechaCreacionDepartamento, :descDepartamento, :volumenNegocio, :FechaBaja)";
+
+                    $consulta = $conexion->prepare($sql);
+
+                    //Insertar los departamentos en la ase de datos
+                    foreach ($departamentos as $departamento) {
+                        // Ejecuta la consulta para insertar el departamento
+                        $consulta->execute($departamento);
+                    }
+
+                    echo "<p>Importación a la base de datos exitosa.</p>";
+                } catch (PDOException $ex) {
+                    echo "<p>Error al conectar a la base de datos: " . $ex->getMessage() . "</p>";
+                } finally {
+                    // Cierra la conexión
+                    unset($conexion);
                 }
+            } else {
+                echo "<p>Error al decodificar los datos JSON.</p>";
             }
-
-            // En caso de que no haya errores, realizamos la búsqueda y mostramos la tabla actualizada
-            try {
-                $miDB = new PDO($dsn, $username, $password);
-                // Valor de búsqueda proporcionado por el usuario
-                $valor_busqueda = isset($_REQUEST['DescDepartamento']) ? '%' . $_REQUEST['DescDepartamento'] . '%' : '';
-
-                // Obtener resultados como objetos
-                echo "<h1>Resultados de la búsqueda</h1>";
-                $resultadoDepartamentos = $miDB->query("SELECT * FROM T02_Departamento WHERE T02_DescDepartamento LIKE '$valor_busqueda';");
-                //Mostrar el numerode registros mediante rowCount()
-                printf("<p>Número de registros: %s</p><br>", $resultadoDepartamentos->rowCount());
-                //Cargamos los resultados mediante fetch(PDO::FETCH_OBJ).
-                $oDepartamento = $resultadoDepartamentos->fetchObject();
-                //Creamos una tabla para mostrar los resultados
-                echo "<table class=tabla_resultados><tr><th>CodigoDepartamento</th><th>DescripcionDepartamento</th><th>FechaCreacionDepartamento</th><th>VolumenDeNegocio</th><th>FechaBajaDepartamento</th></tr><tbody>";
-                while ($oDepartamento != null) {
-                    echo "<tr>";
-                    //Recorrido de la fila cargada
-                    echo "<td>$oDepartamento->T02_CodDepartamento</td>"; //Obtener los códigos.
-                    echo "<td>$oDepartamento->T02_DescDepartamento</td>"; //Obtener las descripciones.
-                    echo "<td>$oDepartamento->T02_FechaCreacionDepartamento</td>"; //Obtener la fecha de creacion
-                    echo "<td>$oDepartamento->T02_VolumenNegocio</td>"; //Obtener el volumen de negocio.
-                    echo "<td>$oDepartamento->T02_FechaBaja</td>"; //Obtener la fecha de baja.
-                    echo "</tr>";
-                    $oDepartamento = $resultadoDepartamentos->fetchObject();
-                }
-                echo "</tbody></table>";
-            } catch (PDOException $pdoEx) {
-                echo ("<div class='fs-4 text'>ERROR AL MOSTRAR LOS VALORES</div> " . $pdoEx->getMessage());
-            }
-            unset($miDB);
         } else {
-            try {
-                $miDB = new PDO($dsn, $username, $password);
-                // Obtener resultados como objetos
-                echo "<h1>Resultados de la búsqueda</h1>";
-                $resultadoDepartamentos = $miDB->query("select * from T02_Departamento;");
-                //Mostrar el numerode registros mediante rowCount()
-                printf("<p>Número de registros: %s</p><br>", $resultadoDepartamentos->rowCount());
-                //Cargamos los resultados mediante fetch(PDO::FETCH_OBJ).
-                $oDepartamento = $resultadoDepartamentos->fetchObject();
-                //Creamos una tabla para mostrar los resultados
-                echo "<table class=tabla_resultados><tr><th>CodigoDepartamento</th><th>DescripcionDepartamento</th><th>FechaCreacionDepartamento</th><th>VolumenDeNegocio</th><th>FechaBajaDepartamento</th></tr><tbody>";
-                while ($oDepartamento != null) {
-                    echo "<tr>";
-                    //Recorrido de la fila cargada
-                    echo "<td>$oDepartamento->T02_CodDepartamento</td>"; //Obtener los códigos.
-                    echo "<td>$oDepartamento->T02_DescDepartamento</td>"; //Obtener las descripciones.
-                    echo "<td>$oDepartamento->T02_FechaCreacionDepartamento</td>"; //Obtener la fecha de creacion
-                    echo "<td>$oDepartamento->T02_VolumenNegocio</td>"; //Obtener el volumen de negocio.
-                    echo "<td>$oDepartamento->T02_FechaBaja</td>"; //Obtener la fecha de baja.
-                    echo "</tr>";
-                    $oDepartamento = $resultadoDepartamentos->fetchObject();
-                }
-                echo "</tbody></table>";
-            } catch (PDOException $pdoEx) {
-                echo ("<div class='fs-4 text'>ERROR AL MOSTRAR LOS VALORES</div> " . $pdoEx->getMessage());
-            }
-            unset($miDB);
+            echo "<p>El archivo JSON no existe.</p>";
         }
         ?>
+
+
         <footer class="bg-primary text-light py-4 fixed-bottom">
             <div class="container">
                 <div class="row">

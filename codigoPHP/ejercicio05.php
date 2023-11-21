@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>codigo03</title>
+        <title>codigo05</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="/208DWESProyectoTema3/webroot/css/style.css">
         <style>
@@ -105,7 +104,7 @@
     <body style="margin-top:70px; margin-bottom: 100px">
         <nav class="navbar navbar-expand-lg bg-primary fixed-top">
             <div class="container">
-                <a class="navbar-brand text-white" href="/index.html">Ejercicio03</a>
+                <a class="navbar-brand text-white" href="/index.html">Ejercicio05</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -133,13 +132,13 @@
             // Preparamos las consultas
             $resultadoconsultaInsercion = $miDB->prepare($consultaInsercion);
 
-            // ARRAY CON REGISTROS
+            // array con los registros a añadir
             $aDepartamentosNuevos = [
                 ['CodDepartamento' => 'STM', 'DescDepartamento' => 'Departamento de Sistemas', 'FechaCreacionDepartamento' => FECHA_ACTUAL, 'VolumenNegocio' => 550, 'FechaBaja' => null],
                 ['CodDepartamento' => 'FNT', 'DescDepartamento' => 'Departamento de Fuentes', 'FechaCreacionDepartamento' => FECHA_ACTUAL, 'VolumenNegocio' => 100, 'FechaBaja' => null]
             ];
-
-            foreach ($aDepartamentosNuevos as $departamento) { //Recorremos los registros que vamos a insertar en la tabla
+            //Recorremos los registros que vamos a insertar en la tabla
+            foreach ($aDepartamentosNuevos as $departamento) {
                 $aResgistros = [':CodDepartamento' => $departamento['CodDepartamento'],
                     ':DescDepartamento' => $departamento['DescDepartamento'],
                     ':FechaCreacionDepartamento' => $departamento['FechaCreacionDepartamento'],
@@ -152,7 +151,7 @@
             }
             if ($entradaOK) {
                 // Confirma los cambios
-                $miDB->commit(); 
+                $miDB->commit();
                 echo ("<div class='respuestaCorrecta'>Los datos se han insertado correctamente en la tabla Departamento.</div>");
 
                 // Preparamos y ejecutamos la consulta SQL
@@ -200,7 +199,7 @@
             echo "<span class='errorException'>Código del error: </span>" . $errorExcepcion;
         } finally {
             //Cerramos la conexion
-            unset($miDB); 
+            unset($miDB);
         }
         ?>
         <footer class="bg-primary text-light py-4 fixed-bottom">
