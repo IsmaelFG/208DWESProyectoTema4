@@ -22,7 +22,7 @@
         /**
          * @author Ismael Ferreras García
          * @version 1.0
-         * @since 6/11/2023
+         * @since 21/11/2023
          */
         define('HOST', '192.168.20.19'); // Nombre del servidor
         define('DBNAME', 'DB208DWESProyectoTema4'); // Nombre de la base de datos
