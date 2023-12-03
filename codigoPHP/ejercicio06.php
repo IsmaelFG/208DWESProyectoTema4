@@ -112,9 +112,7 @@
             </div>
         </nav>
         <?php
-        $dsn = 'mysql:host=192.168.20.19;dbname=DB208DWESProyectoTema4';
-        $username = 'user208DWESProyectoTema4';
-        $password = 'paso';
+        require_once '../config/confDB.php';
 // Especifica la ruta al archivo JSON
         $jsonFilePath = "/var/www/DAW208/public_html/208DWESProyectoTema4/tmp/departamentos.json";
 
@@ -128,14 +126,14 @@
 
             // Verifica si la decodificación fue exitosa
             if ($departamentos !== null) {
-                
+
                 try {
                     // Conexión a la base de datos
-                    $conexion = new PDO($dsn, $username, $password);
+                    $miDB = new PDO(DSN, USERNAME, PASSWORD);
 
                     // Prepara la consulta para la inserción
-                    $sql = "INSERT INTO T02_Departamento (T02_CodDepartamento, T02_FechaCreacionDepartamento, T02_DescDepartamento, T02_VolumenNegocio, T02_FechaBaja) 
-                    VALUES (:codDepartamento, :fechaCreacionDepartamento, :descDepartamento, :volumenNegocio, :FechaBaja)";
+                    $sql = "INSERT INTO T02_Departamento (T02_CodDepartamento, T02_FechaCreacionDepartamento, T02_DescDepartamento, T02_VolumenDeNegocio, T02_FechaBajaDepartamento) 
+                    VALUES (:codDepartamento, :fechaCreacionDepartamento, :descDepartamento, :VolumenDeNegocio, :FechaBajaDepartamento)";
 
                     $consulta = $conexion->prepare($sql);
 

@@ -24,13 +24,10 @@
          * @version 1.0
          * @since 6/11/2023
          */
-        $dsn = 'mysql:host=192.168.20.19;dbname=DB208DWESProyectoTema4';
-        $username = 'user208DWESProyectoTema4';
-        $password = 'paso';
-
+        require_once '../config/confDB.php';
         try {
-            //Crear un objeto PDO.
-            $miDB = new PDO($dsn, $username, $password);
+            // Establecemos la conexión por medio de PDO
+            $miDB = new PDO(DSN, USERNAME, PASSWORD);
             //Ejecutamos una query en la tabla Departamento.
             $resultadoDepartamentos = $miDB->query("select * from T02_Departamento;");
             //Mostrar el numerode registros mediante rowCount()
@@ -45,8 +42,8 @@
                 echo "<td>$oDepartamento->T02_CodDepartamento</td>"; //Obtener los códigos.
                 echo "<td>$oDepartamento->T02_DescDepartamento</td>"; //Obtener las descripciones.
                 echo "<td>$oDepartamento->T02_FechaCreacionDepartamento</td>"; //Obtener la fecha de creacion
-                echo "<td>$oDepartamento->T02_VolumenNegocio</td>"; //Obtener el volumen de negocio.
-                echo "<td>$oDepartamento->T02_FechaBaja</td>"; //Obtener la fecha de baja.
+                echo "<td>$oDepartamento->T02_VolumenDeNegocio</td>"; //Obtener el volumen de negocio.
+                echo "<td>$oDepartamento->T02_FechaBajaDepartamento</td>"; //Obtener la fecha de baja.
                 echo "</tr>";
                 $oDepartamento = $resultadoDepartamentos->fetchObject();
             }

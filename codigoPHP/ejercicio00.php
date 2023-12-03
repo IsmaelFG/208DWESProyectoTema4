@@ -24,13 +24,10 @@
          * @version 1.0
          * @since 21/11/2023
          */
-        define('HOST', '192.168.20.19'); // Nombre del servidor
-        define('DBNAME', 'DB208DWESProyectoTema4'); // Nombre de la base de datos
-        define('USERNAME', 'user208DWESProyectoTema4'); // Nombre de usuario
-        define('PASSWORD', 'paso'); // Contraseña
+        require_once '../config/confDB.php';
         try {
             // Establecemos la conexión por medio de PDO
-            $miDB = new PDO('mysql:host=' . HOST . ';' . DBNAME, USERNAME, PASSWORD);
+            $miDB = new PDO(DSN, USERNAME, PASSWORD);
             echo ("CONEXIÓN EXITOSA") . "<br>";
             // Mostrar atributos de la conexión PDO
             echo "ERRMODE: " . $miDB->getAttribute(PDO::ATTR_ERRMODE) . "<br>";

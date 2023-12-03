@@ -143,9 +143,7 @@
         </form>
 
         <?php
-        $dsn = 'mysql:host=192.168.20.19;dbname=DB208DWESProyectoTema4';
-        $username = 'user208DWESProyectoTema4';
-        $password = 'paso';
+        require_once '../config/confDB.php';
         include_once('../core/231018libreriaValidacion.php');
 
         // Verificar si se envió el formulario
@@ -173,7 +171,7 @@
 
             // En caso de que no haya errores, realizamos la búsqueda y mostramos la tabla actualizada
             try {
-                $miDB = new PDO($dsn, $username, $password);
+                $miDB = new PDO(DSN, USERNAME, PASSWORD);
                 // Valor de búsqueda proporcionado por el usuario
                 $valor_busqueda = isset($_REQUEST['DescDepartamento']) ? '%' . $_REQUEST['DescDepartamento'] . '%' : '';
 
@@ -192,8 +190,8 @@
                     echo "<td>$oDepartamento->T02_CodDepartamento</td>"; //Obtener los códigos.
                     echo "<td>$oDepartamento->T02_DescDepartamento</td>"; //Obtener las descripciones.
                     echo "<td>$oDepartamento->T02_FechaCreacionDepartamento</td>"; //Obtener la fecha de creacion
-                    echo "<td>$oDepartamento->T02_VolumenNegocio</td>"; //Obtener el volumen de negocio.
-                    echo "<td>$oDepartamento->T02_FechaBaja</td>"; //Obtener la fecha de baja.
+                    echo "<td>$oDepartamento->T02_VolumenDeNegocio</td>"; //Obtener el volumen de negocio.
+                    echo "<td>$oDepartamento->T02_FechaBajaDepartamento</td>"; //Obtener la fecha de baja.
                     echo "</tr>";
                     $oDepartamento = $resultadoDepartamentos->fetchObject();
                 }
@@ -204,7 +202,7 @@
             unset($miDB);
         } else {
             try {
-                $miDB = new PDO($dsn, $username, $password);
+                $miDB = new PDO(DSN, USERNAME, PASSWORD);
                 // Obtener resultados como objetos
                 echo "<h1>Resultados de la búsqueda</h1>";
                 $resultadoDepartamentos = $miDB->query("select * from T02_Departamento;");
@@ -220,8 +218,8 @@
                     echo "<td>$oDepartamento->T02_CodDepartamento</td>"; //Obtener los códigos.
                     echo "<td>$oDepartamento->T02_DescDepartamento</td>"; //Obtener las descripciones.
                     echo "<td>$oDepartamento->T02_FechaCreacionDepartamento</td>"; //Obtener la fecha de creacion
-                    echo "<td>$oDepartamento->T02_VolumenNegocio</td>"; //Obtener el volumen de negocio.
-                    echo "<td>$oDepartamento->T02_FechaBaja</td>"; //Obtener la fecha de baja.
+                    echo "<td>$oDepartamento->T02_VolumenDeNegocio</td>"; //Obtener el volumen de negocio.
+                    echo "<td>$oDepartamento->T02_FechaBajaDepartamento</td>"; //Obtener la fecha de baja.
                     echo "</tr>";
                     $oDepartamento = $resultadoDepartamentos->fetchObject();
                 }

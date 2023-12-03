@@ -112,38 +112,36 @@
             </div>
         </nav>
         <?php
-        $dsn = 'mysql:host=192.168.20.19;dbname=DB208DWESProyectoTema4';
-        $username = 'user208DWESProyectoTema4';
-        $password = 'paso';
+        require_once '../config/confDB.php';
         include_once('../core/231018libreriaValidacion.php');
         define('FECHA_ACTUAL', date('Y-m-d H:i:s'));
         $entradaOK = true;
         try {
             // Conexion con la Base de datos
-            $miDB = new PDO($dsn, $username, $password);
+            $miDB = new PDO(DSN, USERNAME, PASSWORD);
             // Configuramos las excepciones
             $miDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // Deshabilitamos el modo autocommit
             $miDB->beginTransaction();
             // Consultas SQL de inserción 
-            $consultaInsercion = "INSERT T02_Departamento(T02_CodDepartamento, T02_DescDepartamento, T02_FechaCreacionDepartamento, T02_VolumenNegocio, T02_FechaBaja) "
-                    . "VALUES (:CodDepartamento, :DescDepartamento, :FechaCreacionDepartamento, :VolumenNegocio, :FechaBaja)";
+            $consultaInsercion = "INSERT T02_Departamento(T02_CodDepartamento, T02_DescDepartamento, T02_FechaCreacionDepartamento, T02_VolumenDeNegocio, T02_FechaBajaDepartamento) "
+                    . "VALUES (:CodDepartamento, :DescDepartamento, :FechaCreacionDepartamento, :VolumenDeNegocio, :FechaBajaDepartamento)";
 
             // Preparamos las consultas
             $resultadoconsultaInsercion = $miDB->prepare($consultaInsercion);
 
             // array con los registros a añadir
             $aDepartamentosNuevos = [
-                ['CodDepartamento' => 'STM', 'DescDepartamento' => 'Departamento de Sistemas', 'FechaCreacionDepartamento' => FECHA_ACTUAL, 'VolumenNegocio' => 550, 'FechaBaja' => null],
-                ['CodDepartamento' => 'FNT', 'DescDepartamento' => 'Departamento de Fuentes', 'FechaCreacionDepartamento' => FECHA_ACTUAL, 'VolumenNegocio' => 100, 'FechaBaja' => null]
+                ['CodDepartamento' => 'STM', 'DescDepartamento' => 'Departamento de Sistemas', 'FechaCreacionDepartamento' => FECHA_ACTUAL, 'VolumenDeNegocio' => 550, 'FechaBajaDepartamento' => null],
+                ['CodDepartamento' => 'FNT', 'DescDepartamento' => 'Departamento de Fuentes', 'FechaCreacionDepartamento' => FECHA_ACTUAL, 'VolumenDeNegocio' => 100, 'FechaBajaDepartamento' => null]
             ];
             //Recorremos los registros que vamos a insertar en la tabla
             foreach ($aDepartamentosNuevos as $departamento) {
                 $aResgistros = [':CodDepartamento' => $departamento['CodDepartamento'],
                     ':DescDepartamento' => $departamento['DescDepartamento'],
                     ':FechaCreacionDepartamento' => $departamento['FechaCreacionDepartamento'],
-                    ':VolumenNegocio' => $departamento['VolumenNegocio'],
-                    ':FechaBaja' => $departamento['FechaBaja']];
+                    ':VolumenDeNegocio' => $departamento['VolumenDeNegocio'],
+                    ':FechaBajaDepartamento' => $departamento['FechaBajaDepartamento']];
                 if (!$resultadoconsultaInsercion->execute($aResgistros)) {
                     $entradaOK = false;
                     break;
@@ -179,8 +177,8 @@
                     echo ("<td>" . $oDepartamento->T02_CodDepartamento . "</td>");
                     echo ("<td>" . $oDepartamento->T02_DescDepartamento . "</td>");
                     echo ("<td>" . $oDepartamento->T02_FechaCreacionDepartamento . "</td>");
-                    echo ("<td>" . $oDepartamento->T02_VolumenNegocio . "</td>");
-                    echo ("<td>" . $oDepartamento->T02_FechaBaja . "</td>");
+                    echo ("<td>" . $oDepartamento->T02_VolumenDeNegocio . "</td>");
+                    echo ("<td>" . $oDepartamento->T02_FechaBajaDepartamento . "</td>");
                     echo ("</tr>");
                 }
 

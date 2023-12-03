@@ -114,20 +114,18 @@
 
         <?php
         try {
-            $dsn = 'mysql:host=192.168.20.19;dbname=DB208DWESProyectoTema4';
-            $username = 'user208DWESProyectoTema4';
-            $password = 'paso';
+            require_once '../config/confDB.php';
             include_once('../core/231018libreriaValidacion.php');
-            $miDB = new PDO($dsn, $username, $password);
+            $miDB = new PDO(DSN, USERNAME, PASSWORD);
             $miDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Configuramos las excepciones
             //TRANSACCION
             // Deshabilitamos el modo autocommit
             $miDB->beginTransaction();
 
             // Consultas SQL de inserción 
-            $consultaInsercion1 = "INSERT INTO T02_Departamento(T02_CodDepartamento,T02_DescDepartamento,T02_VolumenNegocio) VALUES ('DOF', 'Departamento de Ofimatica', 500)";
-            $consultaInsercion2 = "INSERT INTO T02_Departamento(T02_CodDepartamento,T02_DescDepartamento,T02_VolumenNegocio) VALUES ('DID', 'Departamento de I+D', 200)";
-            $consultaInsercion3 = "INSERT INTO T02_Departamento(T02_CodDepartamento,T02_DescDepartamento,T02_VolumenNegocio) VALUES ('DGT', 'Departamento de Gestion', 1000)";
+            $consultaInsercion1 = "INSERT INTO T02_Departamento(T02_CodDepartamento,T02_DescDepartamento,T02_VolumenDeNegocio) VALUES ('DOF', 'Departamento de Ofimatica', 500)";
+            $consultaInsercion2 = "INSERT INTO T02_Departamento(T02_CodDepartamento,T02_DescDepartamento,T02_VolumenDeNegocio) VALUES ('DID', 'Departamento de I+D', 200)";
+            $consultaInsercion3 = "INSERT INTO T02_Departamento(T02_CodDepartamento,T02_DescDepartamento,T02_VolumenDeNegocio) VALUES ('DGT', 'Departamento de Gestion', 1000)";
 
             // Preparamos las consultas
             $resultadoconsultaInsercion1 = $miDB->prepare($consultaInsercion1);
@@ -152,8 +150,8 @@
                                         <tr>
                                             <th>CodDepartamento</th>
                                             <th>DescDepartamento</th>
-                                            <th>FechaBaja</th>
-                                            <th>VolumenNegocio</th>
+                                            <th>FechaBajaDepartamento</th>
+                                            <th>VolumenDeNegocio</th>
                                         </tr>
                                         </thead>");
 
@@ -164,8 +162,8 @@
                     echo "<td>$oDepartamento->T02_CodDepartamento</td>"; //Obtener los códigos.
                     echo "<td>$oDepartamento->T02_DescDepartamento</td>"; //Obtener las descripciones.
                     echo "<td>$oDepartamento->T02_FechaCreacionDepartamento</td>"; //Obtener la fecha de creacion
-                    echo "<td>$oDepartamento->T02_VolumenNegocio</td>"; //Obtener el volumen de negocio.
-                    echo "<td>$oDepartamento->T02_FechaBaja</td>"; //Obtener la fecha de baja.
+                    echo "<td>$oDepartamento->T02_VolumenDeNegocio</td>"; //Obtener el volumen de negocio.
+                    echo "<td>$oDepartamento->T02_FechaBajaDepartamento</td>"; //Obtener la fecha de baja.
                     echo ("</tr>");
                 }
 

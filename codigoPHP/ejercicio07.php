@@ -112,9 +112,7 @@
             </div>
         </nav>
         <?php
-        $dsn = 'mysql:host=192.168.20.19;dbname=DB208DWESProyectoTema4';
-        $username = 'user208DWESProyectoTema4';
-        $password = 'paso';
+        require_once '../config/confDB.php';
         include_once('../core/231018libreriaValidacion.php');
 
 // Declaro una variable de entrada para mostrar o no la tabla con los valores de la BD
@@ -123,7 +121,7 @@
 //Abro un bloque try catch para tener un mayor control de los errores
         try {
             // CONEXION CON LA BD
-            $miDB = new PDO($dsn, $username, $password);
+            $miDB = new PDO(DSN, USERNAME, PASSWORD);
 
             //Preparamos la consulta que previamente vamos a ejecutar
             $resultadoConsulta = $miDB->prepare('SELECT * FROM T02_Departamento');
@@ -146,8 +144,8 @@
                     'codDepartamento' => $oResultado->T02_CodDepartamento,
                     'fechaCreacionDepartamento' => $oResultado->T02_FechaCreacionDepartamento,
                     'descDepartamento' => $oResultado->T02_DescDepartamento,
-                    'volumenNegocio' => $oResultado->T02_VolumenNegocio,
-                    'FechaBaja' => $oResultado->T02_FechaBaja
+                    'VolumenDeNegocio' => $oResultado->T02_VolumenDeNegocio,
+                    'FechaBajaDepartamento' => $oResultado->T02_FechaBajaDepartamento
                 ];
 
                 // Añadimos el array $aDepartamento al array $aDepartamentos

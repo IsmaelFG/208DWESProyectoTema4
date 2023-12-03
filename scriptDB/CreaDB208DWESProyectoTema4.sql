@@ -1,4 +1,4 @@
--- Crea la base de datos DB208DWESProyectoTema4
+c-- Crea la base de datos DB208DWESProyectoTema4
 CREATE DATABASE IF NOT EXISTS DB208DWESProyectoTema4;
 
 -- Selecciona la base de datos recién creada
@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS T02_Departamento (
     T02_CodDepartamento CHAR(3) NOT NULL,
     T02_DescDepartamento VARCHAR(255),
     T02_FechaCreacionDepartamento DATETIME,
-    T02_VolumenNegocio FLOAT,
-    T02_FechaBaja DATETIME,
+    T02_VolumenDeNegocio FLOAT,
+    T02_FechaBajaDepartamento DATETIME,
     PRIMARY KEY (T02_CodDepartamento)
 );
 
