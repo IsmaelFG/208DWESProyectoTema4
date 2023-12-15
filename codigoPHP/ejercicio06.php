@@ -135,7 +135,7 @@
                     $sql = "INSERT INTO T02_Departamento (T02_CodDepartamento, T02_FechaCreacionDepartamento, T02_DescDepartamento, T02_VolumenDeNegocio, T02_FechaBajaDepartamento) 
                     VALUES (:codDepartamento, :fechaCreacionDepartamento, :descDepartamento, :VolumenDeNegocio, :FechaBajaDepartamento)";
 
-                    $consulta = $conexion->prepare($sql);
+                    $consulta = $miDB->prepare($sql);
 
                     //Insertar los departamentos en la ase de datos
                     foreach ($departamentos as $departamento) {
@@ -148,7 +148,7 @@
                     echo "<p>Error al conectar a la base de datos: " . $ex->getMessage() . "</p>";
                 } finally {
                     // Cierra la conexión
-                    unset($conexion);
+                    unset($miDB);
                 }
             } else {
                 echo "<p>Error al decodificar los datos JSON.</p>";

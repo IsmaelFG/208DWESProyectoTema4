@@ -43,25 +43,6 @@
         }
         unset($miDB);
         ?>
-        <?php
-        try {
-            // Establecemos la conexión por medio de PDO
-            $miDB = new PDO('mysql:host=' . HOST . ';' . DBNAME, USERNAME, 'aaa');
-            echo ("CONEXIÓN EXITOSA") . "<br>";
-            // Mostrar atributos de la conexión PDO
-            echo "ERRMODE: " . $miDB->getAttribute(PDO::ATTR_ERRMODE) . "<br>";
-            echo "EMULATE_PREPARES: " . $miDB->getAttribute(PDO::ATTR_EMULATE_PREPARES) . "<br>";
-            echo "DEFAULT_FETCH_MODE: " . $miDB->getAttribute(PDO::ATTR_DEFAULT_FETCH_MODE) . "<br>";
-            echo "DRIVER_NAME: " . $miDB->getAttribute(PDO::ATTR_DRIVER_NAME) . "<br>";
-            echo "SERVER_INFO: " . $miDB->getAttribute(PDO::ATTR_SERVER_INFO) . "<br>";
-            echo "SERVER_VERSION: " . $miDB->getAttribute(PDO::ATTR_SERVER_VERSION) . "<br>";
-            echo "CLIENT_VERSION: " . $miDB->getAttribute(PDO::ATTR_CLIENT_VERSION) . "<br>";
-            echo "AUTOCOMMIT: " . $miDB->getAttribute(PDO::ATTR_AUTOCOMMIT) . "<br>";
-        } catch (PDOException $pdoEx) { // En caso de error salta la excepcion
-            echo ("ERROR DE CONEXIÓN " . $pdoEx->getMessage());
-        }
-        unset($miDB);
-        ?>
         <footer class="bg-primary text-light py-4 fixed-bottom">
             <div class="container">
                 <div class="row">

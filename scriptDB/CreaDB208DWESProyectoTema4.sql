@@ -1,4 +1,4 @@
-c-- Crea la base de datos DB208DWESProyectoTema4
+-- Crea la base de datos DB208DWESProyectoTema4
 CREATE DATABASE IF NOT EXISTS DB208DWESProyectoTema4;
 
 -- Selecciona la base de datos recién creada
